@@ -1,0 +1,14 @@
+/*
+!.gitignore
+!*.png
+!CMakeLists.txt
+!doc
+!src
+!ext
+!static
+!data
+!data_src
+*.blend[0-9]
+*.kra[~]
+*.swp
+data/server/certificates/*
