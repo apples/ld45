@@ -1,6 +1,7 @@
 #include "engine.hpp"
 
 #include "physics.hpp"
+#include "velocity_system.hpp"
 
 void engine::register_engine_module() {
     auto global_table = sol::table(lua.globals());
@@ -18,6 +19,7 @@ void engine::register_engine_module() {
     };
 
     engine_table["physics_system"] = physics_system;
+    engine_table["velocity_system"] = velocity_system;
 
     lua["package"]["loaded"]["engine"] = engine_table;
 }

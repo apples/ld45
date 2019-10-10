@@ -6,13 +6,12 @@ local guppy = {}
 
 function guppy.update(eid, dt)
     local state = engine.entities:get_component(eid, component.script).state
-    local vel = engine.entities:get_component(eid, component.velocity).vel
     local spr = engine.entities:get_component(eid, component.sprite)
-    local pos = engine.entities:get_component(eid, component.position).pos
+    local pos
+    local vel
 
     state.next_decision = state.next_decision - dt
     state.next_bubble = state.next_bubble - dt
-
     state.food = state.food - dt / 2
 
     if not state.grown then
@@ -31,6 +30,7 @@ function guppy.update(eid, dt)
     end
 
     if state.next_decision <= 0 then
+        vel = vel or engine.entities:get_component(eid, component.velocity).vel
         local vx = (math.random() * 2 - 1) * 5
         local vy = (math.random() * 2 - 1) * 3
 
@@ -44,8 +44,8 @@ function guppy.update(eid, dt)
         spr.speed = spd
     end
 
-
     if state.next_bubble <= 0 then
+        pos = pos or engine.entities:get_component(eid, component.position).pos
         spawn_bubble({ x = pos.x, y = pos.y })
         play_sfx('bubble')
 
@@ -55,6 +55,7 @@ function guppy.update(eid, dt)
     local fooding = false
 
     if state.food < 20 then
+        pos = pos or engine.entities:get_component(eid, component.position).pos
         local closest = nil
         visitor.visit(
             {component.food, component.position},
@@ -71,6 +72,7 @@ function guppy.update(eid, dt)
             end
         )
         if closest then
+            vel = vel or engine.entities:get_component(eid, component.velocity).vel
             local xdist = closest.pos.x - pos.x
             local ydist = closest.pos.y - pos.y
             local dist = math.sqrt(xdist*xdist + ydist*ydist)
@@ -85,6 +87,7 @@ function guppy.update(eid, dt)
     if state.food < 5 and not fooding then
         spr.flip = not spr.flip
     else
+        vel = vel or engine.entities:get_component(eid, component.velocity).vel
         spr.flip = vel.x < 0
     end
 end
