@@ -6,7 +6,7 @@ config = {
 }
 
 game_state = {
-    money = 50,
+    money = 0,
     shop_items = {
         {
             name = 'food',
